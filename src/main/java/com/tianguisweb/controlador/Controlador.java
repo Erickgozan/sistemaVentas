@@ -18,24 +18,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
-/**
- *
- * @author erick
- */
 public class Controlador extends HttpServlet {
 
     private Conexion conexion;
     @Resource(name= "jdbc/tianguisWeb")
     private DataSource pool;
+   
     @Override
     public void init() throws ServletException {
        
-        try {
-            conexion = (Conexion) pool.getConnection();
-        } catch (SQLException ex) {
-           
-            
-        }
+        conexion = new Conexion(pool);
         
     }
     
