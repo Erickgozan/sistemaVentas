@@ -5,50 +5,75 @@
  */
 package com.tianguisweb.controlador;
 
-import com.tianguisweb.config.Conexion;
+import com.tianguisweb.modelo.Producto;
+import com.tianguisweb.modelo.ProductoDAO;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.Resource;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
 import javax.sql.DataSource;
 
+@MultipartConfig
 public class Controlador extends HttpServlet {
 
-    private Conexion conexion;
-    @Resource(name= "jdbc/tianguisWeb")
+    @Resource(name = "jdbc/tianguisWeb")
     private DataSource pool;
-   
+    private ProductoDAO productoDao;
+
     @Override
     public void init() throws ServletException {
-       
-        conexion = new Conexion(pool);
-        
-    }
-    
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet Controlador</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet Controlador at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+        try {
+            productoDao = new ProductoDAO(pool);
+        } catch (Exception e) {
+            System.out.println("Eroror: " + e.getLocalizedMessage());
         }
     }
 
-    
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+
+        String metodo = request.getParameter("agregar");
+
+        switch (metodo) {
+
+            case "insertar":
+                agregarProducto(request, response);
+                break;
+
+        }
+    }
+
+    private void agregarProducto(HttpServletRequest request, HttpServletResponse response) {
+
+        try {
+            PrintWriter out = response.getWriter();
+            Producto p;
+
+            String nombreProducto = request.getParameter("nombreProducto");
+            Part archivoImagen = request.getPart("archivoImagen");
+            InputStream isIMG = archivoImagen.getInputStream();
+            String descripcion = request.getParameter("descripcion");
+            double precio = Double.parseDouble(request.getParameter("precio"));
+            int stock = Integer.parseInt(request.getParameter("stock"));
+
+            p = new Producto(nombreProducto, isIMG, descripcion, precio, stock);
+
+            productoDao.agregarProducto(p);
+
+            out.print("El producto se agrego correctamente");
+
+        } catch (IOException | ServletException ex) {
+            System.out.println("Error al agregar el producto " + ex.getLocalizedMessage());
+        }
+
+    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
