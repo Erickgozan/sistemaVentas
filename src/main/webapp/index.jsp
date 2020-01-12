@@ -1,3 +1,4 @@
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -16,7 +17,7 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item active">
-                        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                        <a class="nav-link" href="Controlador?accion=home">Home <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="agregar.jsp">Agregar</a>
@@ -48,9 +49,29 @@
                 </ul>
             </div>
         </nav>
-
+        <!--Cuerpo donde se visualizan los productos-->
         <div class="container mt-2">
-
+            <div class="row">
+                <c:forEach var="producto" items="${productos}">
+                <div class="col-sm-4">       
+                    <div class="card">
+                        <div class="card-header text-center">
+                            <label>${producto.nombre}</label>
+                        </div>
+                        <div class="card-body"><i>$.${producto.precio}</i>
+                            <img src="ControladorIMG?id=${producto.idProducto}" width="200" height="180">                         
+                        </div>
+                        <div class="card-footer text-center">
+                            <labe>${producto.descripcion}</labe>
+                            <div>
+                                <a href="" class="btn btn-outline-info">Agregar a carrito</a>
+                                <a href="" class="btn btn-danger">Comprar</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </c:forEach>
+            </div>
         </div>
 
         <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
