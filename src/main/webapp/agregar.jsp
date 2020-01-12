@@ -54,36 +54,36 @@
                 </ul>
             </div>
         </nav>
-
+        <!--Formulario para agregar el producto--> 
         <div class="container mt-2" style="padding: 40px; border: 1px solid; ">
-            <form action="controlador" method="POST" enctype="multipart/form-data">
+            <form action="Controlador" method="POST" enctype="multipart/form-data">
                 <div class="form-row">
                     <div class="form-group col-md-6">
-                        <label for="inputEmail4">Nombre de la imagen</label>
-                        <input type="text" class="form-control" id="mobreImg" placeholder="Nombre de la imagen">
+                        <label for="nombreProducto">Nombre del producto</label>
+                        <input type="text" name="nombreProducto" class="form-control" id="nombreProducto" placeholder="Nombre del producto">
                     </div>
                     <div class="form-group col-md-6">
                         <label for="archivoImagen">Imagen</label>
-                        <input type="file" class="form-control" id="archivoImagen">
+                        <input type="file"  name="archivoImagen" class="form-control" id="archivoImagen">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="descripcion">Example textarea</label>
-                    <textarea class="form-control" id="descripcion" rows="2"></textarea>
+                    <textarea class="form-control" name="descripcion" id="descripcion" rows="2"></textarea>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label for="precio">Precio</label>
-                        <input type="text" class="form-control" id="precio">
+                        <input type="text" name="precio" class="form-control" id="precio">
                     </div>
                     <div class="form-group col-md-6">
                         <label for="stock">Stock</label>
-                        <input type="text" class="form-control" id="stock">
+                        <input type="text" name="stock" class="form-control" id="stock">
                     </div>
                 </div>
                 <br>
-                <button type="submit" class="btn btn-primary btn-lg btn-block">Subir</button>
+                <button type="submit" name="agregar" value="insertar" class="btn btn-primary btn-lg btn-block">Insertar</button>
             </form>
         </div>
 
