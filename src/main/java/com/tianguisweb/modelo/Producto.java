@@ -5,6 +5,7 @@ import java.io.InputStream;
 
 public class Producto {
     
+    private int idProducto;
     private String nombre;
     private InputStream imagen;
     private String descripcion;
@@ -13,13 +14,21 @@ public class Producto {
     
     public Producto(){}
 
-    public Producto(String nombre, InputStream imagen, String descripcion, double precio, int stock) {
-   
+    public Producto(int idProducto,String nombre, InputStream imagen, String descripcion, double precio, int stock) {
+        this.idProducto=idProducto;
         this.nombre = nombre;
         this.imagen = imagen;
         this.descripcion = descripcion;
         this.precio = precio;
         this.stock = stock;
+    }
+
+    public int getIdProducto() {
+        return idProducto;
+    }
+
+    public void setIdProducto(int idProducto) {
+        this.idProducto = idProducto;
     }
 
 
