@@ -83,7 +83,7 @@
                     </div>
                 </div>
                 <br>
-                <button type="submit" name="agregar" value="insertar" class="btn btn-primary btn-lg btn-block">Insertar</button>
+                <button type="submit" name="accion" value="agrgegar" class="btn btn-primary btn-lg btn-block">Insertar</button>
             </form>
         </div>
 
