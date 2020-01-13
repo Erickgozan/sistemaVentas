@@ -51,6 +51,9 @@ public class Controlador extends HttpServlet {
             case "agrgegar":
                 agregarProducto(request, response);
                 break;
+            case "home":
+              listarProductos(request,response);
+              break;
             default:
             listarProductos(request,response);
 
@@ -79,7 +82,7 @@ public class Controlador extends HttpServlet {
 
             productoDao.agregarProducto(p);
 
-            out.print("El producto se agrego correctamente");
+            request.getRequestDispatcher("Controlador?accion=home").forward(request, response);
 
         } catch (IOException | ServletException ex) {
             System.out.println("Error al agregar el producto " + ex.getLocalizedMessage());
