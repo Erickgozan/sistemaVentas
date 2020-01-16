@@ -106,4 +106,33 @@ public class ProductoDAO {
         }
     }
 
+    public Producto listarId(int id) throws SQLException {
+        String sql = "SELECT * FROM producto WHERE idProducto=" + id;
+        Producto p = new Producto();
+
+        try {
+            conexion = origenDatos.getConnection();
+            ps = conexion.prepareStatement(sql);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+
+                p.setIdProducto(rs.getInt("idProducto"));
+                p.setNombre(rs.getString("Nombres"));
+                p.setImagen(rs.getBinaryStream("Foto"));
+                p.setDescripcion(rs.getString("Descripcion"));
+                p.setPrecio(rs.getDouble("Precio"));
+                p.setStock(rs.getInt("Stock"));
+
+            }
+        } catch (SQLException e) {
+
+        } finally {
+            conexion.close();
+            ps.close();
+        }
+
+        return p;
+    }
+
 }
