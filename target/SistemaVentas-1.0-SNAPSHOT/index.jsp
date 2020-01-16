@@ -51,25 +51,26 @@
         </nav>
         <!--Cuerpo donde se visualizan los productos-->
         <div class="container mt-2">
+
             <div class="row">
                 <c:forEach var="producto" items="${productos}">
-                <div class="col-sm-4">       
-                    <div class="card">
-                        <div class="card-header text-center">
-                            <label>${producto.nombre}</label>
-                        </div>
-                        <div class="card-body"><i>$.${producto.precio}</i>
-                            <img src="ControladorIMG?id=${producto.idProducto}" width="200" height="180">                         
-                        </div>
-                        <div class="card-footer text-center">
-                            <labe>${producto.descripcion}</labe>
-                            <div>
-                                <a href="" class="btn btn-outline-info">Agregar a carrito</a>
-                                <a href="" class="btn btn-danger">Comprar</a>
+                    <div class="col-sm-4">       
+                        <div class="card">
+                            <div class="card-header text-center">
+                                <label>${producto.nombre}</label>
+                            </div>
+                            <div class="card-body"><i>$${producto.precio}</i>
+                                <img src="ControladorIMG?id=${producto.idProducto}" width="200" height="180">                         
+                            </div>
+                            <div class="card-footer text-center">
+                                <labe>${producto.descripcion}</labe>
+                                <div>
+                                    <a href="" class="btn btn-outline-info">Agregar a carrito</a>
+                                    <a href="" class="btn btn-danger">Comprar</a>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
                 </c:forEach>
             </div>
         </div>
