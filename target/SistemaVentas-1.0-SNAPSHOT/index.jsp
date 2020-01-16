@@ -4,7 +4,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+        <script src="https://kit.fontawesome.com/465fbf8ed4.js" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
         <title>Tianguis web</title>
     </head>
@@ -27,7 +27,7 @@
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link disabled" href="#">Carrito de compras</a>
+                        <a class="nav-link disabled" href="Controlador?accion=carrito"><i class="fas fa-cart-plus">(<label style="color: chocolate">${contador}</label>)</i>Carrito</a>
                     </li>
                 </ul>
                 <form class="form-inline my-2 my-lg-0">
@@ -65,7 +65,7 @@
                             <div class="card-footer text-center">
                                 <labe>${producto.descripcion}</labe>
                                 <div>
-                                    <a href="" class="btn btn-outline-info">Agregar a carrito</a>
+                                    <a href="Controlador?accion=agreagrCarrito&idProducto=${producto.idProducto}" class="btn btn-outline-info">Agregar a carrito</a>
                                     <a href="" class="btn btn-danger">Comprar</a>
                                 </div>
                             </div>
