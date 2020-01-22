@@ -66,7 +66,7 @@
                                 <labe>${producto.descripcion}</labe>
                                 <div>
                                     <a href="Controlador?accion=agreagrCarrito&idProducto=${producto.idProducto}" class="btn btn-outline-info">Agregar a carrito</a>
-                                    <a href="" class="btn btn-danger">Comprar</a>
+                                    <a href="Controlador?accion=comprar&idProducto=${producto.idProducto}" class="btn btn-danger">Comprar</a>
                                 </div>
                             </div>
                         </div>
