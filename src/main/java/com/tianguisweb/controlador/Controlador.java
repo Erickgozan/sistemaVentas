@@ -62,7 +62,7 @@ public class Controlador extends HttpServlet {
                 agregarCarrito(request, response);
                 break;
             case "delete":
-                eliminarCarrito(request,response);
+                eliminarCarrito(request, response);
             case "carrito":
                 listarCarrito(request, response);
                 break;
@@ -118,19 +118,47 @@ public class Controlador extends HttpServlet {
 
     private void agregarCarrito(HttpServletRequest request, HttpServletResponse response) {
         try {
+            int pos = 0;
+            cantidad = 1;
             int idP = Integer.parseInt(request.getParameter("idProducto"));
             Producto p;
             p = productoDao.listarId(idP);
-            item += 1;
-            Carrito car = new Carrito();
-            car.setItem(item);
-            car.setIdProducto(p.getIdProducto());
-            car.setNombre(p.getNombre());
-            car.setDescripcion(p.getDescripcion());
-            car.setPrecioCompra(p.getPrecio());
-            car.setCantidad(cantidad);
-            car.setSubTotal(cantidad * p.getPrecio());
-            listaCarrito.add(car);
+            if (listaCarrito.size() > 0) {
+                for (int i = 0; i < listaCarrito.size(); i++) {
+                    if (idP == listaCarrito.get(i).getIdProducto()) {
+                        pos = i;
+                    }
+                }
+                if (idP == listaCarrito.get(pos).getIdProducto()) {
+                    cantidad = listaCarrito.get(pos).getCantidad() + cantidad;
+                    double subtotal = listaCarrito.get(pos).getPrecioCompra() * cantidad;
+                    listaCarrito.get(pos).setCantidad(cantidad);
+                    listaCarrito.get(pos).setSubTotal(subtotal);
+                } else {
+                    item += 1;
+                    Carrito car = new Carrito();
+                    car.setItem(item);
+                    car.setIdProducto(p.getIdProducto());
+                    car.setNombre(p.getNombre());
+                    car.setDescripcion(p.getDescripcion());
+                    car.setPrecioCompra(p.getPrecio());
+                    car.setCantidad(cantidad);
+                    car.setSubTotal(cantidad * p.getPrecio());
+                    listaCarrito.add(car);
+                }
+            } else {
+                item += 1;
+                Carrito car = new Carrito();
+                car.setItem(item);
+                car.setIdProducto(p.getIdProducto());
+                car.setNombre(p.getNombre());
+                car.setDescripcion(p.getDescripcion());
+                car.setPrecioCompra(p.getPrecio());
+                car.setCantidad(cantidad);
+                car.setSubTotal(cantidad * p.getPrecio());
+                listaCarrito.add(car);
+            }
+
             request.setAttribute("contador", listaCarrito.size());
             request.getRequestDispatcher("Controlador?accion=home").forward(request, response);
         } catch (SQLException | IOException | ServletException ex) {
@@ -155,7 +183,7 @@ public class Controlador extends HttpServlet {
     private void comprar(HttpServletRequest request, HttpServletResponse response) {
 
         try {
-            totalPagar=0.0;
+            totalPagar = 0.0;
             int idP = Integer.parseInt(request.getParameter("idProducto"));
             Producto p;
             p = productoDao.listarId(idP);
@@ -173,29 +201,24 @@ public class Controlador extends HttpServlet {
                 totalPagar = totalPagar + listaCarrito.get(i).getSubTotal();
             }
             request.setAttribute("totalApagar", totalPagar);
-            request.setAttribute("carrito",listaCarrito);        
+            request.setAttribute("carrito", listaCarrito);
             request.setAttribute("contador", listaCarrito.size());
             request.getRequestDispatcher("carrito.jsp").forward(request, response);
         } catch (SQLException | IOException | ServletException ex) {
             out.print("Error en el metodo agregarCarrito " + ex.getLocalizedMessage());
         }
     }
-    
-     private void eliminarCarrito(HttpServletRequest request, HttpServletResponse response) {
-       
+
+    private void eliminarCarrito(HttpServletRequest request, HttpServletResponse response) {
+
         int idProducto = Integer.parseInt(request.getParameter("idp"));
-        
-         for (int i = 0; i < listaCarrito.size(); i++) {
-             if(listaCarrito.get(i).getIdProducto()==idProducto){
-                 listaCarrito.remove(i);
-             }
-         }
-     }
-    
-    
-    
-    
-    
+
+        for (int i = 0; i < listaCarrito.size(); i++) {
+            if (listaCarrito.get(i).getIdProducto() == idProducto) {
+                listaCarrito.remove(i);
+            }
+        }
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -219,5 +242,4 @@ public class Controlador extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
-   
 }
