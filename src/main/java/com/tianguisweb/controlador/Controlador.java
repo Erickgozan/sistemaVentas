@@ -14,8 +14,6 @@ import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.Resource;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -31,12 +29,12 @@ public class Controlador extends HttpServlet {
     @Resource(name = "jdbc/tianguisWeb")
     private DataSource conexion;
     private ProductoDAO productoDao;
-     PrintWriter out;
-     List<Carrito> listaCarrito = new ArrayList<>();
-     int item;
-     double totalPagar = 0.0;
-     int cantidad = 1;
-     
+    PrintWriter out;
+    List<Carrito> listaCarrito = new ArrayList<>();
+    int item;
+    double totalPagar = 0.0;
+    int cantidad = 1;
+
     @Override
     public void init() throws ServletException {
         try {
@@ -57,11 +55,16 @@ public class Controlador extends HttpServlet {
             case "agrgegar":
                 agregarProducto(request, response);
                 break;
-            case "agreagrCarrito":
-                agregarCarrito(request,response);
+            case "comprar":
+                comprar(request, response);
                 break;
+            case "agreagrCarrito":
+                agregarCarrito(request, response);
+                break;
+            case "delete":
+                eliminarCarrito(request,response);
             case "carrito":
-                listarCarrito(request,response);
+                listarCarrito(request, response);
                 break;
             case "home":
                 listarProductos(request, response);
@@ -75,7 +78,7 @@ public class Controlador extends HttpServlet {
     private void agregarProducto(HttpServletRequest request, HttpServletResponse response) {
 
         try {
-           
+
             Producto p;
 
             String nombreProducto = request.getParameter("nombreProducto");
@@ -109,16 +112,16 @@ public class Controlador extends HttpServlet {
             request.setAttribute("productos", productos);
             request.getRequestDispatcher("index.jsp").forward(request, response);
         } catch (SQLException ex) {
-            Logger.getLogger(Controlador.class.getName()).log(Level.SEVERE, null, ex);
+            out.print("Error en el metodo listarProductos " + ex.getLocalizedMessage());
         }
     }
-    
-     private void agregarCarrito(HttpServletRequest request, HttpServletResponse response) {
+
+    private void agregarCarrito(HttpServletRequest request, HttpServletResponse response) {
         try {
             int idP = Integer.parseInt(request.getParameter("idProducto"));
             Producto p;
             p = productoDao.listarId(idP);
-            item+=1;
+            item += 1;
             Carrito car = new Carrito();
             car.setItem(item);
             car.setIdProducto(p.getIdProducto());
@@ -126,21 +129,21 @@ public class Controlador extends HttpServlet {
             car.setDescripcion(p.getDescripcion());
             car.setPrecioCompra(p.getPrecio());
             car.setCantidad(cantidad);
-            car.setSubTotal(cantidad*p.getPrecio());
-             listaCarrito.add(car);
-             request.setAttribute("contador", listaCarrito.size());
-             request.getRequestDispatcher("Controlador?accion=home").forward(request, response);
+            car.setSubTotal(cantidad * p.getPrecio());
+            listaCarrito.add(car);
+            request.setAttribute("contador", listaCarrito.size());
+            request.getRequestDispatcher("Controlador?accion=home").forward(request, response);
         } catch (SQLException | IOException | ServletException ex) {
-           out.print("Error en el metodo agregarCarrito " + ex.getLocalizedMessage());
+            out.print("Error en el metodo agregarCarrito " + ex.getLocalizedMessage());
         }
     }
-     
-     private void listarCarrito(HttpServletRequest request, HttpServletResponse response) {
+
+    private void listarCarrito(HttpServletRequest request, HttpServletResponse response) {
         try {
-            totalPagar=0.0;
+            totalPagar = 0.0;
             request.setAttribute("carrito", listaCarrito);
             for (int i = 0; i < listaCarrito.size(); i++) {
-                totalPagar=totalPagar+listaCarrito.get(i).getSubTotal();
+                totalPagar = totalPagar + listaCarrito.get(i).getSubTotal();
             }
             request.setAttribute("totalApagar", totalPagar);
             request.getRequestDispatcher("carrito.jsp").forward(request, response);
@@ -149,7 +152,50 @@ public class Controlador extends HttpServlet {
         }
     }
 
-   
+    private void comprar(HttpServletRequest request, HttpServletResponse response) {
+
+        try {
+            totalPagar=0.0;
+            int idP = Integer.parseInt(request.getParameter("idProducto"));
+            Producto p;
+            p = productoDao.listarId(idP);
+            item += 1;
+            Carrito car = new Carrito();
+            car.setItem(item);
+            car.setIdProducto(p.getIdProducto());
+            car.setNombre(p.getNombre());
+            car.setDescripcion(p.getDescripcion());
+            car.setPrecioCompra(p.getPrecio());
+            car.setCantidad(cantidad);
+            car.setSubTotal(cantidad * p.getPrecio());
+            listaCarrito.add(car);
+            for (int i = 0; i < listaCarrito.size(); i++) {
+                totalPagar = totalPagar + listaCarrito.get(i).getSubTotal();
+            }
+            request.setAttribute("totalApagar", totalPagar);
+            request.setAttribute("carrito",listaCarrito);        
+            request.setAttribute("contador", listaCarrito.size());
+            request.getRequestDispatcher("carrito.jsp").forward(request, response);
+        } catch (SQLException | IOException | ServletException ex) {
+            out.print("Error en el metodo agregarCarrito " + ex.getLocalizedMessage());
+        }
+    }
+    
+     private void eliminarCarrito(HttpServletRequest request, HttpServletResponse response) {
+       
+        int idProducto = Integer.parseInt(request.getParameter("idp"));
+        
+         for (int i = 0; i < listaCarrito.size(); i++) {
+             if(listaCarrito.get(i).getIdProducto()==idProducto){
+                 listaCarrito.remove(i);
+             }
+         }
+     }
+    
+    
+    
+    
+    
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -173,6 +219,5 @@ public class Controlador extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
-    
-
+   
 }
