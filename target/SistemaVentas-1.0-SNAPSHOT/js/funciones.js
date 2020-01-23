@@ -26,7 +26,7 @@ $(document).ready(function () {
             } else {
                 Swal.fire('El producto no se pudo eliminar');
             }
-        })
+        });
 
     });
 
@@ -41,4 +41,19 @@ $(document).ready(function () {
             }
         });
     }
+    
+    $("td #cantidad").click(function (){
+        var idp = $(this).parent().find("#idpro").val();
+        var cantidad = $(this).parent().find("#cantidad").val();
+        var url = "Controlador?accion=actualizarCantidad";
+        
+        $.ajax({
+            type:'POST',
+            url: url,
+            data: "idp="+idp+"&cantidad="+cantidad,
+            success:function(data){
+                location.href="Controlador?accion=carrito";
+            }
+        });
+    });
 });

@@ -63,6 +63,8 @@ public class Controlador extends HttpServlet {
                 break;
             case "delete":
                 eliminarCarrito(request, response);
+            case "actualizarCantidad":
+                actualizarCantidad(request, response);
             case "carrito":
                 listarCarrito(request, response);
                 break;
@@ -119,7 +121,6 @@ public class Controlador extends HttpServlet {
     private void agregarCarrito(HttpServletRequest request, HttpServletResponse response) {
         try {
             int pos = 0;
-            cantidad = 1;
             int idP = Integer.parseInt(request.getParameter("idProducto"));
             Producto p;
             p = productoDao.listarId(idP);
@@ -218,6 +219,22 @@ public class Controlador extends HttpServlet {
                 listaCarrito.remove(i);
             }
         }
+    }
+
+    private void actualizarCantidad(HttpServletRequest request, HttpServletResponse response) {
+
+        int idpro = Integer.parseInt(request.getParameter("idp"));
+        int cant = Integer.parseInt(request.getParameter("cantidad"));
+
+        for (int i = 0; i < listaCarrito.size(); i++) {
+            if (listaCarrito.get(i).getIdProducto() == idpro) {
+                listaCarrito.get(i).setCantidad(cant);
+                double st = listaCarrito.get(i).getPrecioCompra() * cant;
+                listaCarrito.get(i).setSubTotal(st);
+            }
+
+        }
+
     }
 
     @Override
