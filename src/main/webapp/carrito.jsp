@@ -76,7 +76,10 @@
                                     <img src="ControladorIMG?id=${car.idProducto}" width="100" height="100">
                                 </td>
                                 <td>${car.precioCompra}</td>
-                                <td>${car.cantidad}</td>
+                                <td>
+                                    <input type="hidden" id="idpro" value="${car.idProducto}">
+                                    <input type="number" id="cantidad" value="${car.cantidad}" class="form-control text-center" min="1">
+                                </td>
                                 <td>${car.subTotal}</td>
                                 <td>
                                     <input type="hidden" id="idp" value="${car.idProducto}">
